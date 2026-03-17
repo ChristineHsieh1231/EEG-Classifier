@@ -1,0 +1,6 @@
+streamlit
+numpy
+xgboost
+mne
+pandas
+plotly
