@@ -230,7 +230,7 @@ if uploaded_file is not None:
             color='gray'       # Set to gray to distinguish from the filtered signal
         )
        
-        fig_raw.set_size_inches(15, 4)
+        fig_raw.set_size_inches(15, 8)
         st.pyplot(fig_raw, use_container_width=True)
 
         
@@ -251,5 +251,5 @@ if uploaded_file is not None:
             bgcolor='#f5f5dc', 
             color='darkblue'   
         )
-        fig_filtered.set_size_inches(15, 4)
+        fig_filtered.set_size_inches(15, 8)
         st.pyplot(fig_filtered, use_container_width=True)
