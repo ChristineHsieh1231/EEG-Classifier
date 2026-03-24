@@ -215,7 +215,7 @@ if uploaded_file is not None:
         st.plotly_chart(fig, use_container_width=True)
 
 # --- 2. RENDER THE PLOTS AT THE BOTTOM ---
-
+    plt.rcParams["figure.figsize"] = (15, 8)
     with plot_container:
         st.write("### Clinical EEG Preview (Raw Data)")
         
