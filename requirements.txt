@@ -5,3 +5,4 @@ mne
 pandas
 plotly
 gdown
+emd
