@@ -7,6 +7,7 @@ import os
 import time
 import pandas as pd
 import plotly.express as px
+import gdown
 from eeg_features import butter_bandpass_filter, process_emd_cycles, auto_select_active_segment
 
 # 1. Map predictions back to readable labels
@@ -20,17 +21,28 @@ REVERSE_MAPPING = {
 }
 
 # 2. Load the trained model (cached)
+
 @st.cache_resource
 def load_model():
-    booster = xgb.Booster()
-    booster.load_model('eeg_xgb_model.ubj')
-    return booster
+    model_path = 'eeg_xgb_model.ubj'
     
+    # 如果雲端伺服器上沒有這個檔案，就自動去 Google Drive 下載
+    if not os.path.exists(model_path):
+        with st.spinner('正在從雲端下載 AI 模型，請稍候...'):
+            
+            file_id = '1BS_VW8qfabgSy_OsWlTpH6qJN5xHizyH' 
+            url = f'https://drive.google.com/uc?id={file_id}'
+            gdown.download(url, model_path, quiet=False)
+            
+    # 下載完成後，載入 XGBoost 模型
+    model = xgb.Booster()
+    model.load_model(model_path)
+    return model
 model = load_model()
 
 # 3. Build the User Interface
 st.title("Clinical EEG Pattern Classifier")
-st.write("Upload a standard **.edf** file to predict brain activity patterns.")
+st.write("Upload a standard 19-channels EEG **.edf** file to predict brain activity patterns.")
 
 uploaded_file = st.file_uploader("Upload Medical EEG Data (.edf format)", type=['edf'])
 
