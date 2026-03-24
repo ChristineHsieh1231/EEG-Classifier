@@ -219,7 +219,7 @@ if uploaded_file is not None:
     plt.rcParams["figure.figsize"] = (15, 8)
 
     with plot_container:
-    st.write("### Clinical EEG Preview (Raw Data)")
+        st.write("### Clinical EEG Preview (Raw Data)")
     
     # 加上 spinner 讓使用者知道系統正在畫圖，避免乾等
         with st.spinner('正在渲染原始腦波圖 (50秒)...'):
