@@ -226,7 +226,7 @@ if uploaded_file is not None:
             duration=50.0, 
             show_scrollbars=False, 
             show=False,
-            scalings='auto'        
+            scalings='auto',       
             bgcolor='#f5f5dc', 
             color='gray'       # Set to gray to distinguish from the filtered signal
         )
@@ -246,7 +246,7 @@ if uploaded_file is not None:
             duration=50.0, 
             show_scrollbars=False, 
             show=False,
-            scalings='auto'        
+            scalings='auto',       
             bgcolor='#f5f5dc', 
             color='darkblue'   
         )
