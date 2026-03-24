@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#8c9b9d" # Muted Slate-Blue / Dusty Sage
+backgroundColor = "#f4f1eb" # Warm Canvas / Cream
+secondaryBackgroundColor = "#e5e1d8" # Dusty Beige
+textColor = "#5c5753" # Soft Charcoal / Brown
+font = "sans serif"
