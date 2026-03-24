@@ -8,6 +8,7 @@ import time
 import pandas as pd
 import plotly.express as px
 import gdown
+import matplotlib.pyplot as plt
 from eeg_features import butter_bandpass_filter, process_emd_cycles, auto_select_active_segment
 
 # 1. Map predictions back to readable labels
@@ -216,32 +217,46 @@ if uploaded_file is not None:
 
 # --- 2. RENDER THE PLOTS AT THE BOTTOM ---
     plt.rcParams["figure.figsize"] = (15, 8)
+
     with plot_container:
-        st.write("### Clinical EEG Preview (Raw Data)")
+    st.write("### Clinical EEG Preview (Raw Data)")
+    
+    # 加上 spinner 讓使用者知道系統正在畫圖，避免乾等
+        with st.spinner('正在渲染原始腦波圖 (50秒)...'):
+        
+        # 🌟 效能優化關鍵：複製並降採樣到 100 Hz
+            raw_for_plot = raw.copy().resample(100)
         
         # Plot 1: The Raw Data
-        fig_raw = raw.plot(
-            duration=10.0,      
-            n_channels=min(20, len(raw.ch_names)),     
-            scalings='auto',   
-            show=False,        
-            bgcolor='#f5f5dc', 
-            color='gray'       # Set to gray to distinguish from the filtered signal
-        )
-        st.pyplot(fig_raw)
+            fig_raw = raw_for_plot.plot(
+                duration=50.0,         # 👈 放心地改成 50 秒
+                n_channels=min(20, len(raw.ch_names)),     
+                scalings='auto',
+                show_scrollbars=False, # 👈 隱藏網頁上拉不動的捲軸
+                show=False,        
+                bgcolor='#f5f5dc', 
+                color='gray'       
+            )
+            st.pyplot(fig_raw)
 
-        st.divider()
+    st.divider()
 
-        st.write("### Clinical EEG Preview (Filtered: 0.5 - 30 Hz)")
+    st.write("### Clinical EEG Preview (Filtered: 0.5 - 30 Hz)")
+    
+    with st.spinner('正在渲染濾波後腦波圖 (50秒)...'):
         
         # Plot 2: The Filtered Data
         filtered_mne_data = filtered_data.T
         filtered_raw = mne.io.RawArray(filtered_mne_data, raw.info, verbose=False)
         
-        fig_filtered = filtered_raw.plot(
-            duration=10.0,      
+        # 🌟 效能優化關鍵：對濾波後的 RawArray 也進行降採樣
+        filtered_for_plot = filtered_raw.copy().resample(100)
+        
+        fig_filtered = filtered_for_plot.plot(
+            duration=50.0,         # 👈 放心地改成 50 秒
             n_channels=min(20, filtered_data.shape[1]), 
             scalings='auto',   
+            show_scrollbars=False, # 👈 隱藏網頁上拉不動的捲軸
             show=False,        
             bgcolor='#f5f5dc', 
             color='darkblue'   
