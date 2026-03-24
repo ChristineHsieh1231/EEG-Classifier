@@ -215,17 +215,16 @@ if uploaded_file is not None:
         st.plotly_chart(fig, use_container_width=True)
 
 # --- 2. RENDER THE PLOTS AT THE BOTTOM ---
-  
+
     with plot_container:
         st.write("### Clinical EEG Preview (Raw Data)")
-        plt.rcParams["figure.figsize"] = (15, 8)
+        
         # Plot 1: The Raw Data
-        fig_raw = raw.plot(      
+        fig_raw = raw.plot(
+            duration=15.0,      
             n_channels=min(20, len(raw.ch_names)),     
-            duration=25.0, 
-            show_scrollbars=False, 
-            show=False,
-            scalings='auto',       
+            scalings='auto',   
+            show=False,        
             bgcolor='#f5f5dc', 
             color='gray'       # Set to gray to distinguish from the filtered signal
         )
@@ -240,11 +239,10 @@ if uploaded_file is not None:
         filtered_raw = mne.io.RawArray(filtered_mne_data, raw.info, verbose=False)
         
         fig_filtered = filtered_raw.plot(
-            duration=25.0,      
+            duration=15.0,      
             n_channels=min(20, filtered_data.shape[1]), 
-            show_scrollbars=False, 
-            show=False,
-            scalings='auto',       
+            scalings='auto',   
+            show=False,        
             bgcolor='#f5f5dc', 
             color='darkblue'   
         )
