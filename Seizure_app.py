@@ -229,7 +229,11 @@ if uploaded_file is not None:
             bgcolor='#f5f5dc', 
             color='gray'       # Set to gray to distinguish from the filtered signal
         )
-        st.pyplot(fig_raw)
+       
+        fig_raw.set_size_inches(15, 4)
+        st.pyplot(fig_raw, use_container_width=True)
+
+        
 
         st.divider()
 
@@ -247,4 +251,5 @@ if uploaded_file is not None:
             bgcolor='#f5f5dc', 
             color='darkblue'   
         )
-        st.pyplot(fig_filtered)
+        fig_filtered.set_size_inches(15, 4)
+        st.pyplot(fig_filtered, use_container_width=True)
