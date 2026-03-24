@@ -222,7 +222,7 @@ if uploaded_file is not None:
         # Plot 1: The Raw Data
         fig_raw = raw.plot(      
             n_channels=min(20, len(raw.ch_names)),     
-            duration=50.0, 
+            duration=25.0, 
             show_scrollbars=False, 
             show=False,
             scalings='auto',       
@@ -240,7 +240,7 @@ if uploaded_file is not None:
         filtered_raw = mne.io.RawArray(filtered_mne_data, raw.info, verbose=False)
         
         fig_filtered = filtered_raw.plot(
-            duration=50.0,      
+            duration=25.0,      
             n_channels=min(20, filtered_data.shape[1]), 
             show_scrollbars=False, 
             show=False,
