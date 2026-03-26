@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # 這裡從 v4 更新到了 v5，就不會再有警告了
         with:
           python-version: '3.9'
 
@@ -27,7 +27,6 @@ jobs:
               'Accept-Language': 'en-US,en;q=0.9',
           }
           try:
-              # allow_redirects=True 會處理跳轉，timeout 防止死等
               response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
               print(f'Status Code: {response.status_code}')
               print(f'Final URL: {response.url}')
