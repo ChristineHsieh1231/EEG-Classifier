@@ -9,10 +9,32 @@ jobs:
   ping_app:
     runs-on: ubuntu-latest
     steps:
-      - name: Send a request to the app
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run ping script
         run: |
-          # 1. 使用 -A 模擬 Chrome 瀏覽器 (User-Agent)
-          # 2. 使用 --max-redirs 限制跳轉次數，避免死循環
-          # 3. 使用 -k 忽略 SSL 檢查 (有時跳轉會導致證書不匹配)
-          # 4. 去掉 -I，改用一般的 GET 請求 (有些伺服器會擋掉 HEAD 請求)
-          curl -s -L --max-redirs 5 -k -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" https://seizureclassifierapp.streamlit.app/
+          python -c "
+          import requests
+          url = 'https://seizureclassifierapp.streamlit.app/'
+          headers = {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+              'Accept-Language': 'en-US,en;q=0.9',
+          }
+          try:
+              # allow_redirects=True 會處理跳轉，timeout 防止死等
+              response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
+              print(f'Status Code: {response.status_code}')
+              print(f'Final URL: {response.url}')
+              if response.status_code == 200:
+                  print('Success: App is awake!')
+              else:
+                  print('Warning: Received non-200 status code.')
+          except Exception as e:
+              print(f'Error occurred: {e}')
+          "
