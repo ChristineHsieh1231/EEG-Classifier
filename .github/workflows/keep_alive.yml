@@ -2,9 +2,8 @@ name: Wake up Streamlit App Daily
 
 on:
   schedule:
-    # 每天午夜 (UTC 00:00) 執行一次
     - cron: '0 0 * * *'
-  workflow_dispatch: # 保留手動執行按鈕，方便你隨時測試
+  workflow_dispatch: 
 
 jobs:
   ping_app:
@@ -12,5 +11,8 @@ jobs:
     steps:
       - name: Send a request to the app
         run: |
-          # -I 僅請求標頭，-L 自動跟隨重導向，-s 靜音模式
-          curl -I -L -s https://seizureclassifierapp.streamlit.app/
+          # 1. 使用 -A 模擬 Chrome 瀏覽器 (User-Agent)
+          # 2. 使用 --max-redirs 限制跳轉次數，避免死循環
+          # 3. 使用 -k 忽略 SSL 檢查 (有時跳轉會導致證書不匹配)
+          # 4. 去掉 -I，改用一般的 GET 請求 (有些伺服器會擋掉 HEAD 請求)
+          curl -s -L --max-redirs 5 -k -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" https://seizureclassifierapp.streamlit.app/
