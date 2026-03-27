@@ -1,39 +1,35 @@
-name: Wake up Streamlit App Daily
+name: Streamlit Keep-Alive
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch: 
+    # 使用 Cron 語法設定時間。此處設定為「每 10 小時執行一次」
+    # 確保在 Streamlit 的 12 小時休眠期限內觸發
+    - cron: '0 */10 * * *'
+  
+  # 允許你隨時在 GitHub 網頁上手動點擊按鈕執行此腳本
+  workflow_dispatch:
 
 jobs:
-  ping_app:
+  keep-alive:
     runs-on: ubuntu-latest
+    
+    # 給予腳本寫入 Repository 的權限
+    permissions:
+      contents: write
+
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5 # 這裡從 v4 更新到了 v5，就不會再有警告了
-        with:
-          python-version: '3.9'
+      # 1. 下載你的專案程式碼
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Run ping script
+      # 2. 設定一個虛擬的 Git 使用者身分
+      - name: Setup Git User
         run: |
-          python -c "
-          import requests
-          url = 'https://seizureclassifierapp.streamlit.app/'
-          headers = {
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-              'Accept-Language': 'en-US,en;q=0.9',
-          }
-          try:
-              response = requests.get(url, headers=headers, timeout=30, allow_redirects=True)
-              print(f'Status Code: {response.status_code}')
-              print(f'Final URL: {response.url}')
-              if response.status_code == 200:
-                  print('Success: App is awake!')
-              else:
-                  print('Warning: Received non-200 status code.')
-          except Exception as e:
-              print(f'Error occurred: {e}')
-          "
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 3. 建立空的 Commit 並推送到專案中
+      - name: Create Empty Commit and Push
+        run: |
+          git commit --allow-empty -m "chore: auto keep-alive to prevent Streamlit hibernation"
+          git push
