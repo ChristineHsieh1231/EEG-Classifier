@@ -6,4 +6,4 @@
 #### Presentation
 [Google Slide](https://docs.google.com/presentation/d/14XJ7GKn2_xih851EEyDC9FyfTfjw_qslyq_ePWFOWnY/edit?usp=sharing)
 #### Data source
-https://www.kaggle.com/code/cdeotte/how-to-make-spectrogram-from-eeg
+[HMS - Harmful Brain Activity Classification](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification)
